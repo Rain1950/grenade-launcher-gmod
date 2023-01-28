@@ -1,10 +1,17 @@
 SWEP.PrintName = "Grenade Launcher"
 SWEP.Author = "Rain"
 SWEP.Spawnable = true 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic		= true
-SWEP.Primary.Ammo		= "none"
+SWEP.Category = "Rain's"
+
+SWEP.Primary.ClipSize		= 1
+SWEP.Primary.DefaultClip	= 5
+SWEP.Primary.Automatic		= false 
+SWEP.Primary.Ammo		= "grenade_rocket"
+SWEP.Primary.Recoil = 50
+SWEP.Primary.Delay = 0.5
+SWEP.Primary.Automatic = false
+
+
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -19,7 +26,7 @@ SWEP.AutoSwitchFrom		= false
 
 SWEP.Slot			= 1
 SWEP.SlotPos			= 2
-SWEP.DrawAmmo			= false
+SWEP.DrawAmmo			= true 
 SWEP.DrawCrosshair		= true
 
 
@@ -29,11 +36,18 @@ SWEP.ShootSound = Sound( "Metal.SawbladeStick" )
 
 
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire( CurTime() + 0.5 )	
-	self:ThrowChair( "models/props/cs_office/Chair_office.mdl" )
+	if self:Clip1() > 0 then
+		self:SetNextPrimaryFire( CurTime() + 0.5 )	
+		self:ThrowChair( "models/props/cs_office/Chair_office.mdl" )
+		self:TakePrimaryAmmo(1)
+	end
 end
  
 
+
+function SWEP:Think()
+	print(self:Ammo1())
+end
 
 function SWEP:ThrowChair( model_file )
 	local owner = self:GetOwner()

@@ -3,6 +3,10 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 
+
+
+
+
 function ENT:Initialize()
     self:SetModel("models/weapons/grenade.mdl")
     self:SetModelScale(2)
@@ -33,5 +37,14 @@ function ENT:Think()
         if !IsValid(phys) then return end
         phys:ApplyForceOffset( self:GetUp()*-0.2, self:LocalToWorld(Vector(0,0,1)))
     end 
+
+
+end
+
+function ENT:Touch()
+    self:EmitSound("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav")
+    self:Remove()
+
+ 
 
 end
