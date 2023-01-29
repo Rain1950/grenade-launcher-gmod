@@ -1,9 +1,9 @@
 ENT.Type = "anim"
-ENT.Base = "base_gmodentity"
+ENT.Base = "base_anim"
 
 ENT.PrintName = "GL_Ammo"
 ENT.Author = "Rain"
-ENT.Spawnable = false  
+ENT.Spawnable = false 
 
 
 hook.Add("Initialize","add_ammo_rain",function ()
