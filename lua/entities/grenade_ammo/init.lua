@@ -14,9 +14,8 @@ function ENT:Initialize()
     self:DrawShadow(false ) 
 	self:SetMoveType( MOVETYPE_VPHYSICS )   
 	self:SetSolid( SOLID_VPHYSICS ) 
-    
     self.fakegravity = true 
-  
+    self.ArmedOnTouch = false 
 
     local phys = self:GetPhysicsObject()
 
@@ -44,14 +43,24 @@ function ENT:Think()
     end 
 end
 
+function ENT:DelayedFuseExpl(delay)
+    self.ArmedOnTouch = true 
+    self:EmitSound("Weapon_Mortar.Single",150)
+    timer.Simple(delay,function ()
+        if self:IsValid() then
+            self:EmitSound("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav")  // delayed fuse arm after collision
+            self:Remove()
+        end
+    end)
+end
 
 
 function ENT:PhysicsCollide( data, phys )
     local hitent = data.HitEntity
-
-    if(!hitent:IsPlayer()) then
-        self:EmitSound("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav")
-        self:Remove()
+    if( self.ArmedOnTouch == false  ) then
+        self:DelayedFuseExpl(2)
     end
+    
 end
+
 
