@@ -32,13 +32,12 @@ SWEP.DrawCrosshair		= true
 
 SWEP.WorldModel			= "models/weapons/w_pistol.mdl"
 
-SWEP.ShootSound = Sound( "Metal.SawbladeStick" )
 
 
 function SWEP:PrimaryAttack()
 	if self:Clip1() > 0 then
+		self:EmitSound("Weapon_Mortar.Single",150,255)
 		self:SetNextPrimaryFire( CurTime() + 0.5 )	
-
 		self:FireRocket()
 		self:TakePrimaryAmmo(1)
 	end
@@ -49,8 +48,6 @@ end
 function SWEP:FireRocket()
 	local owner = self:GetOwner()
 	if ( not owner:IsValid() ) then return end
-	self:EmitSound( self.ShootSound )
- 
 	if ( CLIENT ) then return end
 
 	local  ent = ents.Create( "grenade_ammo" )

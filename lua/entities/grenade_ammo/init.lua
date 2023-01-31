@@ -2,8 +2,8 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
-
-
+game.AddParticles("particles/Rain_particles.pcf")
+PrecacheParticleSystem("Thruster_Fire")
 
 
 
@@ -16,24 +16,33 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS ) 
     self.fakegravity = true 
     self.ArmedOnTouch = false 
+    PrintTable((file.Find("materials/effects/*.vmt", "GAME")))
 
     local phys = self:GetPhysicsObject()
 
     timer.Simple(0.5,function ()
         self.fakegravity = false 
+        ParticleEffectAttach("Thruster_Fire",PATTACH_ABSORIGIN_FOLLOW,self,1)
+
+       
     end)
     
-    if IsValid(phys) then
+    if IsValid(phys)  then
         timer.Simple(0.5,function ()
+            self:EmitSound("physics/nearmiss/whoosh_large4.wav",105,math.random(80,150))
             if !IsValid(phys) then return end
             phys:ApplyForceCenter(self:GetForward()  * 1500 )
-            
         end)
     end
+
+
+
 
     timer.Simple( 10, function() if self and self:IsValid() then self:Remove() end end )
 
 end
+
+
 
 function ENT:Think()
     if !self:OnGround() && self.fakegravity == true  then
@@ -41,15 +50,17 @@ function ENT:Think()
         if !IsValid(phys) then return end
         phys:ApplyForceOffset( self:GetUp()*-0.2, self:LocalToWorld(Vector(0,0,1)))
     end 
+
+   
+    
 end
 
 function ENT:DelayedFuseExpl(delay)
     self.ArmedOnTouch = true 
-    self:EmitSound("Weapon_Mortar.Single",150)
     timer.Simple(delay,function ()
         if self:IsValid() then
             self:EmitSound("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav")  // delayed fuse arm after collision
-            self:Remove()
+            -- self:Remove()
         end
     end)
 end
