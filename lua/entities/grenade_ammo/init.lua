@@ -8,7 +8,7 @@ PrecacheParticleSystem("Thruster_Smoke")
 
 
 function ENT:Initialize()
-    self:SetModel("models/weapons/grenade.mdl")
+    self:SetModel("models/ammo/rocket-grenade.mdl")
     self:PhysicsInit( SOLID_VPHYSICS )
     self:SetModelScale(2)
     self:DrawShadow(false ) 
@@ -47,7 +47,7 @@ function ENT:Think()
     if !self:OnGround() && self.fakegravity == true  then
         local phys = self:GetPhysicsObject()
         if !IsValid(phys) then return end
-        phys:ApplyForceOffset( self:GetUp()*-0.2, self:LocalToWorld(Vector(0,0,1)))
+        phys:ApplyForceOffset( self:GetUp()*-0.05, self:LocalToWorld(Vector(0,0,0.2)))
     end 
 
    
