@@ -59,7 +59,13 @@ function ENT:DelayedFuseExpl(delay)
     timer.Simple(delay,function ()
         if self:IsValid() then
             self:EmitSound("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav")  // delayed fuse arm after collision
-            -- self:Remove()
+            local effectdata = EffectData()
+            effectdata:SetOrigin(self:GetPos())
+            effectdata:SetMagnitude(500)
+            effectdata:SetScale(1)
+            util.Effect("Explosion",effectdata)
+            util.BlastDamage(self,self,self:GetPos(),250,100)
+            self:Remove()
         end
     end)
 end
