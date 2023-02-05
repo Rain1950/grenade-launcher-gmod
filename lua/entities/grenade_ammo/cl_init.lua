@@ -1,7 +1,8 @@
 
 include("shared.lua")
 
-
+game.AddParticles("particles/Rain_particles.pcf")
+PrecacheParticleSystem("Thruster_Smoke")
 
 
 

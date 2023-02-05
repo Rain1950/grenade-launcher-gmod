@@ -3,7 +3,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 game.AddParticles("particles/Rain_particles.pcf")
-PrecacheParticleSystem("Thruster_Fire")
+PrecacheParticleSystem("Thruster_Smoke")
 
 
 
@@ -16,13 +16,12 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS ) 
     self.fakegravity = true 
     self.ArmedOnTouch = false 
-    PrintTable((file.Find("materials/effects/*.vmt", "GAME")))
 
     local phys = self:GetPhysicsObject()
 
     timer.Simple(0.5,function ()
         self.fakegravity = false 
-        ParticleEffectAttach("Thruster_Fire",PATTACH_ABSORIGIN_FOLLOW,self,1)
+        ParticleEffectAttach("Thruster_Smoke",PATTACH_ABSORIGIN_FOLLOW,self,1)
 
        
     end)
