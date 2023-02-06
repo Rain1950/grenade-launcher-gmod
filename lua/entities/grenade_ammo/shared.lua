@@ -6,6 +6,8 @@ ENT.Author = "Rain"
 ENT.Spawnable = false 
 
 
+
+
 hook.Add("Initialize","add_ammo_rain",function ()
     game.AddAmmoType({
         name = "grenade_rocket",

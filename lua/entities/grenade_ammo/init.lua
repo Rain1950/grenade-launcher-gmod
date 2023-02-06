@@ -2,8 +2,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
-game.AddParticles("particles/Rain_particles.pcf")
-PrecacheParticleSystem("Thruster_Smoke")
+
 
 
 
@@ -16,12 +15,11 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS ) 
     self.fakegravity = true 
     self.ArmedOnTouch = false 
-
+    self.emitSound = false
     local phys = self:GetPhysicsObject()
 
     timer.Simple(0.5,function ()
         self.fakegravity = false 
-        ParticleEffectAttach("Thruster_Smoke",PATTACH_ABSORIGIN_FOLLOW,self,1)
 
        
     end)
@@ -71,12 +69,19 @@ function ENT:DelayedFuseExpl(delay)
 end
 
 
+
 function ENT:PhysicsCollide( data, phys )
     local hitent = data.HitEntity
+    if(self.emitSound == false) then
+        self:EmitSound("physics/metal/metal_canister_impact_hard"..math.random(1,3).. ".wav",70,150,0.6)
+        self.emitSound = true
+    end
+    
     if( self.ArmedOnTouch == false  ) then
         self:DelayedFuseExpl(2)
     end
     
 end
+
 
 

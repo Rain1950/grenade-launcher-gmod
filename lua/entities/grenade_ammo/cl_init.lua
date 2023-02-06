@@ -1,14 +1,22 @@
 
 include("shared.lua")
 
-game.AddParticles("particles/Rain_particles.pcf")
-PrecacheParticleSystem("Thruster_Smoke")
 
 
 
 
 function ENT:Initialize()
       timer.Simple(0.5,function ()
+
+
+        game.AddParticles("particles/Rain_particles.pcf")
+        PrecacheParticleSystem("Thruster_Fire")
+        PrecacheParticleSystem("Thruster_Smoke")
+        local particleEffect = CreateParticleSystem(self,"Thruster_Smoke",PATTACH_ABSORIGIN_FOLLOW,0)
+
+
+        
+
         local FireEmitter = ParticleEmitter(self:GetPos())
         for i = 1, 25 do
             local part = FireEmitter:Add("effects/fire_embers"..math.random(1,3),self:GetPos())
