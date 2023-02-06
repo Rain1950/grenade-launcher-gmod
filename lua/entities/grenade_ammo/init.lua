@@ -4,8 +4,6 @@ include("shared.lua")
 
 
 
-
-
 function ENT:Initialize()
     self:SetModel("models/ammo/rocket-grenade.mdl")
     self:PhysicsInit( SOLID_VPHYSICS )
@@ -17,7 +15,6 @@ function ENT:Initialize()
     self.ArmedOnTouch = false 
     self.emitSound = false
     local phys = self:GetPhysicsObject()
-
     timer.Simple(0.5,function ()
         self.fakegravity = false 
 
@@ -42,6 +39,7 @@ end
 
 
 function ENT:Think()
+    
     if !self:OnGround() && self.fakegravity == true  then
         local phys = self:GetPhysicsObject()
         if !IsValid(phys) then return end
@@ -53,6 +51,7 @@ function ENT:Think()
 end
 
 function ENT:DelayedFuseExpl(delay)
+
     self.ArmedOnTouch = true 
     timer.Simple(delay,function ()
         if self:IsValid() then
