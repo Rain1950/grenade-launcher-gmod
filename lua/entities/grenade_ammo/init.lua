@@ -61,7 +61,7 @@ function ENT:DelayedFuseExpl(delay)
             effectdata:SetMagnitude(500)
             effectdata:SetScale(1)
             util.Effect("Explosion",effectdata)
-            util.BlastDamage(self,self,self:GetPos(),250,100)
+            util.BlastDamage(self,self,self:GetPos(),350,100)
             self:Remove()
         end
     end)
