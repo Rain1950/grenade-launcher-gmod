@@ -6,6 +6,21 @@ ENT.Author = "Rain"
 ENT.Spawnable = false 
 
 
+
+
+
+game.AddParticles("particles/Rain_particles.pcf")
+PrecacheParticleSystem("Thruster_Fire")
+PrecacheParticleSystem("Thruster_Smoke")
+
+
+timer.Simple(0,function()
+    game.AddParticles("particles/Rain_particles.pcf")
+end)
+
+
+
+
 hook.Add("Initialize","add_ammo_rain",function ()
     game.AddAmmoType({
         name = "grenade_rocket",

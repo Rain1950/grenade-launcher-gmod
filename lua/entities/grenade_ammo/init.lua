@@ -2,9 +2,6 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
-game.AddParticles("particles/Rain_particles.pcf")
-PrecacheParticleSystem("Thruster_Smoke")
-
 
 
 function ENT:Initialize()
@@ -16,12 +13,10 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS ) 
     self.fakegravity = true 
     self.ArmedOnTouch = false 
-
+    self.emitSound = false
     local phys = self:GetPhysicsObject()
-
     timer.Simple(0.5,function ()
         self.fakegravity = false 
-        ParticleEffectAttach("Thruster_Smoke",PATTACH_ABSORIGIN_FOLLOW,self,1)
 
        
     end)
@@ -44,6 +39,7 @@ end
 
 
 function ENT:Think()
+    
     if !self:OnGround() && self.fakegravity == true  then
         local phys = self:GetPhysicsObject()
         if !IsValid(phys) then return end
@@ -55,22 +51,36 @@ function ENT:Think()
 end
 
 function ENT:DelayedFuseExpl(delay)
+
     self.ArmedOnTouch = true 
     timer.Simple(delay,function ()
         if self:IsValid() then
             self:EmitSound("ambient/explosions/explode_" .. math.random(1, 9) .. ".wav")  // delayed fuse arm after collision
-            -- self:Remove()
+            local effectdata = EffectData()
+            effectdata:SetOrigin(self:GetPos())
+            effectdata:SetMagnitude(500)
+            effectdata:SetScale(1)
+            util.Effect("Explosion",effectdata)
+            util.BlastDamage(self,self,self:GetPos(),350,100)
+            self:Remove()
         end
     end)
 end
 
 
+
 function ENT:PhysicsCollide( data, phys )
     local hitent = data.HitEntity
+    if(self.emitSound == false) then
+        self:EmitSound("physics/metal/metal_canister_impact_hard"..math.random(1,3).. ".wav",70,150,0.6)
+        self.emitSound = true
+    end
+    
     if( self.ArmedOnTouch == false  ) then
         self:DelayedFuseExpl(2)
     end
     
 end
+
 
 
