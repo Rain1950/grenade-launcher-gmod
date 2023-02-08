@@ -11,14 +11,20 @@ function ENT:Initialize()
     self:DrawShadow(false ) 
 	self:SetMoveType( MOVETYPE_VPHYSICS )   
 	self:SetSolid( SOLID_VPHYSICS ) 
+    self:SetCollisionGroup(COLLISION_GROUP_WEAPON)  //disable collision with player initially
+
     self.fakegravity = true 
     self.ArmedOnTouch = false 
     self.emitSound = false
     local phys = self:GetPhysicsObject()
-    timer.Simple(0.5,function ()
-        self.fakegravity = false 
+    
 
-       
+    timer.Simple(0.1,function()
+        self:SetCollisionGroup(COLLISION_GROUP_NONE)   // return to normal collision group  after 0.1s 
+    end)
+
+    timer.Simple(0.5,function ()
+        self.fakegravity = false   
     end)
     
     if IsValid(phys)  then
@@ -32,7 +38,7 @@ function ENT:Initialize()
 
 
 
-    timer.Simple( 10, function() if self and self:IsValid() then self:Remove() end end )
+    timer.Simple( 10, function() if self and self:IsValid() then self:Remove() end end ) //remove rocket after 10 seconds in case it is stuck or bugged
 
 end
 
@@ -43,10 +49,10 @@ function ENT:Think()
     if !self:OnGround() && self.fakegravity == true  then
         local phys = self:GetPhysicsObject()
         if !IsValid(phys) then return end
-        phys:ApplyForceOffset( self:GetUp()*-0.05, self:LocalToWorld(Vector(0,0,0.2)))
+        phys:ApplyForceOffset( self:GetUp()*-0.05, self:LocalToWorld(Vector(0,0,0.2)))  //apply force to simulate gravity and make rocket rotation match its trajectory 
+        local velocity = phys:GetAngleVelocity()
+        phys:SetAngleVelocity(Vector(velocity.x,velocity.y+1,velocity.z)) // add angle velocity to stabilize rocket
     end 
-
-   
     
 end
 
