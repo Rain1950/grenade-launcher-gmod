@@ -9,7 +9,17 @@ function ENT:Initialize()
     self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )   
 	self:SetSolid( SOLID_VPHYSICS ) 
-    self:SetCollisionGroup(COLLISION_GROUP_WEAPON) //no collision with players
+    -- self:SetCollisionGroup(COLLISION_GROUP_WEAPON) //no collision with players
+
+    
+end
+
+
+function ENT:Use(activator,caller)
+    if (IsValid(activator)) then
+        activator:GiveAmmo(4,"grenade_rocket")
+        self:Remove()
+    end
 
     
 end
