@@ -1,0 +1,5 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "ammo/rocketbox/RustBase_Albedo"
+	"$normalmap" "ammo/rocketbox/RustBase_Normal"
+}
